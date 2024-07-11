@@ -45,8 +45,10 @@ func _process(delta) -> void :
 	
 	if Input.is_action_just_pressed("activate_zoom"):
 		freemove = true
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	if Input.is_action_just_released("activate_zoom"):
 		freemove = false
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	if freemove :
 		horizontalswing(delta)
 		verticalswing(delta)
