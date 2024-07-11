@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://dnfkuofhxxpe3"]
+
+[ext_resource type="Script" path="res://Scripts/FreeLookCamera.gd" id="1_3y43t"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_3h0l4"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r83ux"]
+albedo_color = Color(1, 0.11, 0.11, 1)
+
+[node name="FreeLookCamera" type="Node3D"]
+script = ExtResource("1_3y43t")
+
+[node name="Dolly" type="Node3D" parent="."]
+
+[node name="HorizontalPivot" type="Node3D" parent="Dolly"]
+
+[node name="VerticalPivot" type="Node3D" parent="Dolly/HorizontalPivot"]
+transform = Transform3D(1, 0, 0, 0, 0.919135, 0.393942, 0, -0.393942, 0.919135, 0, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Dolly/HorizontalPivot/VerticalPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+
+[node name="target" type="MeshInstance3D" parent="Dolly"]
+mesh = SubResource("SphereMesh_3h0l4")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_r83ux")
