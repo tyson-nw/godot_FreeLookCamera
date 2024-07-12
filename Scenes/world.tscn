@@ -50,6 +50,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_pr1q4")
 
 [node name="FreeLookCamera" type="Node3D" parent="."]
 script = ExtResource("1_eyj6w")
+show_target = true
 
 [node name="Dolly" type="Node3D" parent="FreeLookCamera"]
 
