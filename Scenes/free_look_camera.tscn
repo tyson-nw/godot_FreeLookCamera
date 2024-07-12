@@ -21,6 +21,7 @@ transform = Transform3D(1, 0, 0, 0, 0.919135, 0.393942, 0, -0.393942, 0.919135, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
 
 [node name="target" type="MeshInstance3D" parent="Dolly"]
+visible = false
 mesh = SubResource("SphereMesh_3h0l4")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_r83ux")

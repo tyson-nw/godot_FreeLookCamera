@@ -2,7 +2,7 @@ extends Node3D
 
 @export_range(0,5,.1) var dolly_speed : float = 4.0
 @export_range(0,0.1,.01) var rotation_speed : float = .02
-@export_range(-180,180,5) var starting_rotation = 15
+@export_range(-180,180,5) var starting_rotation : int = 15
 @export_range(0,90,1) var min_elevation : int = 10
 @export_range(0,90,1) var max_elevation : int = 45
 @export_range(0,90,1) var start_elevation : int = 15
@@ -10,7 +10,7 @@ extends Node3D
 @export_range(0,100,1) var min_zoom : int = 2
 @export_range(0,100,1) var max_zoom : int = 10
 @export_range(0,20,1) var start_zoom : int = 4
-@export var show_target : bool = true
+@export var show_target : bool = false
 
 @onready var dolly : Node3D = $Dolly
 @onready var horizontal_pivot = $Dolly/HorizontalPivot
@@ -21,16 +21,17 @@ extends Node3D
 var freemove : bool = false
 var curr_pivot : float = 0
 var key_controls : Dictionary = {
-	"camera_foreward": [KEY_W],
-	"camera_back": [KEY_S],
-	"camera_left": [KEY_A],
-	"camera_right": [KEY_D]
+	"flc_camera_foreward": [KEY_W],
+	"flc_camera_back": [KEY_S],
+	"flc_camera_left": [KEY_A],
+	"flc_camera_right": [KEY_D]
 }
 var mouse_controls : Dictionary = {
-	"activate_zoom" : [MOUSE_BUTTON_MIDDLE],
-	"zoom_in" : [MOUSE_BUTTON_WHEEL_UP],
-	"zoom_out" : [MOUSE_BUTTON_WHEEL_DOWN]
+	"flc_activate_zoom" : [MOUSE_BUTTON_MIDDLE],
+	"flc_zoom_in" : [MOUSE_BUTTON_WHEEL_UP],
+	"flc_zoom_out" : [MOUSE_BUTTON_WHEEL_DOWN]
 }
+
 
 
 func _ready() -> void :
@@ -40,20 +41,6 @@ func _ready() -> void :
 	cam.translate_object_local(Vector3.BACK * start_zoom)
 	mapinputs()
 	
-func _process(delta) -> void :
-	horizontalmove(delta)
-	
-	if Input.is_action_just_pressed("activate_zoom"):
-		freemove = true
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	if Input.is_action_just_released("activate_zoom"):
-		freemove = false
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	if freemove :
-		horizontalswing(delta)
-		verticalswing(delta)
-	
-	zoom(delta)
 	
 func mapinputs() -> void :
 	var ev
@@ -78,10 +65,24 @@ func mapinputs() -> void :
 			ev = InputEventMouseButton.new()
 			ev.button_index = key
 			InputMap.action_add_event(action, ev)
+
+func _process(delta) -> void :
+	horizontalmove(delta)
 	
+	if Input.is_action_just_pressed("flc_activate_zoom"):
+		freemove = true
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	if Input.is_action_just_released("flc_activate_zoom"):
+		freemove = false
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	if freemove :
+		horizontalswing(delta)
+		verticalswing(delta)
+	
+	zoom(delta)
 
 func horizontalmove(delta) -> void :
-	var direction := Input.get_vector("camera_left","camera_right","camera_foreward","camera_back")
+	var direction := Input.get_vector("flc_camera_left","flc_camera_right","flc_camera_foreward","flc_camera_back")
 	var direction3d := Vector3(direction.x,0,direction.y)
 	dolly.position += direction3d	* delta * dolly_speed
 	
@@ -100,10 +101,10 @@ func zoom(delta) -> void:
 	
 	var distance : float = cam.global_position.distance_to(target.global_position)
 	
-	if Input.is_action_just_released("zoom_in") and distance > min_zoom:
+	if Input.is_action_just_released("flc_zoom_in") and distance > min_zoom:
 		cam.translate_object_local(Vector3.FORWARD * zoom_speed * delta)
 	
-	if Input.is_action_just_released("zoom_out") and distance < max_zoom:
+	if Input.is_action_just_released("flc_zoom_out") and distance < max_zoom:
 		cam.translate_object_local(Vector3.BACK * zoom_speed * delta)
 
 
