@@ -11,6 +11,7 @@ extends Node3D
 @export_range(0,100,1) var max_zoom : int = 10
 @export_range(0,20,1) var start_zoom : int = 4
 @export var show_target : bool = false
+@export var lock_dolly : bool = false
 
 @onready var dolly : Node3D = $Dolly
 @onready var horizontal_pivot = $Dolly/HorizontalPivot
@@ -37,7 +38,12 @@ var mouse_controls : Dictionary = {
 func _ready() -> void :
 	target.visible = show_target
 	vertical_pivot.rotation.x = deg_to_rad(-start_elevation)
-	horizontal_pivot.rotation.y = deg_to_rad(starting_rotation)
+	
+	if lock_dolly :
+		horizontal_pivot.rotation.y = deg_to_rad(starting_rotation)
+	else:
+		dolly.rotation.y = deg_to_rad(starting_rotation)
+		
 	cam.translate_object_local(Vector3.BACK * start_zoom)
 	mapinputs()
 	
@@ -49,7 +55,6 @@ func mapinputs() -> void :
 			printerr(action + " already mapped")
 		else :
 			InputMap.add_action(action)
-			print(action)
 		for key in key_controls[action]:
 			ev = InputEventKey.new()
 			ev.keycode = key
@@ -60,7 +65,6 @@ func mapinputs() -> void :
 			printerr(action + " already mapped")
 		else :
 			InputMap.add_action(action)
-			print(action)
 		for key in mouse_controls[action]:
 			ev = InputEventMouseButton.new()
 			ev.button_index = key
@@ -81,16 +85,29 @@ func _process(delta) -> void :
 	
 	zoom(delta)
 
+# controls the movement of the dolly
 func horizontalmove(delta) -> void :
 	var direction := Input.get_vector("flc_camera_left","flc_camera_right","flc_camera_foreward","flc_camera_back")
-	var direction3d := Vector3(direction.x,0,direction.y)
-	dolly.position += direction3d	* delta * dolly_speed
-	
+	var direction3d := Vector3(direction.x, 0, direction.y)
+		
+	if lock_dolly :
+		dolly.position += direction3d * delta * dolly_speed
+	else:
+		dolly.translate_object_local(direction3d * zoom_speed * delta)
+		# get direction currently pointing
+		# get direction of input
+		
+		# move relative to currently pointing direction.
+		pass
+		
+# controls horizontal swing
 func horizontalswing(delta) -> void:
 	var pivotby : float = Input.get_last_mouse_velocity().x * delta * rotation_speed
-	horizontal_pivot.rotation.y = horizontal_pivot.rotation.y + pivotby
-	#var pivotby = horizontal_pivot.rotation.y + (Input.get_last_mouse_velocity().x * delta * rotation_speed)
-	#horizontal_pivot.rotate.y = clamp(pivotby, deg_to_rad(min_elevation), deg_to_rad(max_elevation))
+	if lock_dolly :
+		horizontal_pivot.rotation.y = horizontal_pivot.rotation.y + pivotby
+	else:
+		dolly.rotation.y = dolly.rotation.y + pivotby
+
 	
 func verticalswing(delta)-> void:
 	var pivotby : float = Input.get_last_mouse_velocity().y * delta * rotation_speed

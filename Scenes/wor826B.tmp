@@ -1,0 +1,78 @@
+[gd_scene load_steps=11 format=3 uid="uid://2ikr418gwwws"]
+
+[ext_resource type="Script" path="res://Scripts/FreeLookCamera.gd" id="1_eyj6w"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_aea5m"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_h7dup"]
+sky_material = SubResource("ProceduralSkyMaterial_aea5m")
+
+[sub_resource type="Environment" id="Environment_gm6sc"]
+background_mode = 2
+sky = SubResource("Sky_h7dup")
+tonemap_mode = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_l8l3w"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0xnmf"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_ehd5x"]
+radius = 1.0
+height = 2.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pr1q4"]
+albedo_color = Color(0.0880475, 0.641009, 0.554031, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_3h0l4"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r83ux"]
+albedo_color = Color(1, 0.11, 0.11, 1)
+
+[node name="World" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_gm6sc")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, -0.163741, 0.71804, 0.676467, -0.472429, 0.544902, -0.692743, 0, 13.9378, -11.8593)
+shadow_enabled = true
+
+[node name="Plane" type="MeshInstance3D" parent="."]
+transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 20, 0, -0.5, 0)
+mesh = SubResource("BoxMesh_l8l3w")
+surface_material_override/0 = SubResource("StandardMaterial3D_0xnmf")
+
+[node name="Center" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_ehd5x")
+surface_material_override/0 = SubResource("StandardMaterial3D_pr1q4")
+
+[node name="FreeLookCamera" type="Node3D" parent="."]
+script = ExtResource("1_eyj6w")
+dolly_speed = null
+rotation_speed = null
+starting_rotation = null
+min_elevation = null
+max_elevation = null
+start_elevation = null
+zoom_speed = null
+min_zoom = null
+max_zoom = null
+start_zoom = null
+show_target = true
+
+[node name="Dolly" type="Node3D" parent="FreeLookCamera"]
+
+[node name="HorizontalPivot" type="Node3D" parent="FreeLookCamera/Dolly"]
+
+[node name="VerticalPivot" type="Node3D" parent="FreeLookCamera/Dolly/HorizontalPivot"]
+transform = Transform3D(1, 0, 0, 0, 0.919135, 0.393942, 0, -0.393942, 0.919135, 0, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="FreeLookCamera/Dolly/HorizontalPivot/VerticalPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+
+[node name="target" type="MeshInstance3D" parent="FreeLookCamera/Dolly"]
+mesh = SubResource("SphereMesh_3h0l4")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_r83ux")
