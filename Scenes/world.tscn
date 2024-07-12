@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://2ikr418gwwws"]
+[gd_scene load_steps=12 format=3 uid="uid://2ikr418gwwws"]
 
 [ext_resource type="Script" path="res://Scripts/FreeLookCamera.gd" id="1_eyj6w"]
 
@@ -30,6 +30,9 @@ albedo_color = Color(0.0880475, 0.641009, 0.554031, 1)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r83ux"]
 albedo_color = Color(1, 0.11, 0.11, 1)
 
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_3ly7e"]
+height = 1.03975
+
 [node name="World" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -45,6 +48,7 @@ mesh = SubResource("BoxMesh_l8l3w")
 surface_material_override/0 = SubResource("StandardMaterial3D_0xnmf")
 
 [node name="Center" type="MeshInstance3D" parent="."]
+visible = false
 mesh = SubResource("SphereMesh_ehd5x")
 surface_material_override/0 = SubResource("StandardMaterial3D_pr1q4")
 
@@ -66,3 +70,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
 mesh = SubResource("SphereMesh_3h0l4")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_r83ux")
+
+[node name="Area3D" type="Area3D" parent="FreeLookCamera/Dolly/target"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FreeLookCamera/Dolly/target/Area3D"]
+shape = SubResource("CylinderShape3D_3ly7e")
