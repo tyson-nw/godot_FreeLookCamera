@@ -4,7 +4,7 @@ This is a simple freelook camera that pivots around a central point. That point 
 
 <div style="text-align:center">
 
-[![IMAGE ALT TEXT HERE](https://i9.ytimg.com/vi_webp/Z7Rgp6_L-KE/mqdefault.webp?v=6690b98a&sqp=CPzywrQG&rs=AOn4CLA0QeUdw8Cde62IWYWuJO4Zw-f1Xw)](https://youtu.be/Z7Rgp6_L-KE)
+[![Demo video](https://i9.ytimg.com/vi_webp/Z7Rgp6_L-KE/mqdefault.webp?v=6690b98a&sqp=CPzywrQG&rs=AOn4CLA0QeUdw8Cde62IWYWuJO4Zw-f1Xw)](https://youtu.be/Z7Rgp6_L-KE)
 
 </div>
 
