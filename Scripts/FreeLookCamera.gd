@@ -3,6 +3,8 @@ extends Node3D
 @export_range(0,5,.1) var dolly_speed : float = 4.0
 @export_range(0,0.1,.01) var rotation_speed : float = .02
 @export_range(-180,180,5) var starting_rotation : int = 15
+@export_range(-180,180,5) var min_rotation : int = -180
+@export_range(-180,180,5) var max_rotation : int = 180
 @export_range(0,90,1) var min_elevation : int = 10
 @export_range(0,90,1) var max_elevation : int = 45
 @export_range(0,90,1) var start_elevation : int = 15
@@ -10,13 +12,14 @@ extends Node3D
 @export_range(0,100,1) var min_zoom : int = 2
 @export_range(0,100,1) var max_zoom : int = 10
 @export_range(0,20,1) var start_zoom : int = 4
+@export var freeze_zoom : bool = false
 @export var show_target : bool = false
 @export var lock_dolly : bool = false
 
 @onready var dolly : Node3D = $Dolly
 @onready var horizontal_pivot = $Dolly/HorizontalPivot
 @onready var vertical_pivot = $Dolly/HorizontalPivot/VerticalPivot
-@onready var cam = $Dolly/HorizontalPivot/VerticalPivot/Camera3D
+@onready var cam = $Dolly/HorizontalPivot/VerticalPivot/MainCamera
 @onready var target = $Dolly/target
 
 var freemove : bool = false
@@ -104,9 +107,11 @@ func horizontalmove(delta) -> void :
 func horizontalswing(delta) -> void:
 	var pivotby : float = Input.get_last_mouse_velocity().x * delta * rotation_speed
 	if lock_dolly :
-		horizontal_pivot.rotation.y = horizontal_pivot.rotation.y + pivotby
+		if horizontal_pivot.rotation.y + pivotby > deg_to_rad(min_rotation) and horizontal_pivot.rotation.y + pivotby < deg_to_rad(max_rotation) :
+			horizontal_pivot.rotation.y = horizontal_pivot.rotation.y + pivotby
 	else:
-		dolly.rotation.y = dolly.rotation.y + pivotby
+		if dolly.rotation.y + pivotby > deg_to_rad(min_rotation) and dolly.rotation.y + pivotby < deg_to_rad(max_rotation) :
+			dolly.rotation.y = dolly.rotation.y + pivotby
 
 	
 func verticalswing(delta)-> void:
@@ -117,6 +122,9 @@ func verticalswing(delta)-> void:
 func zoom(delta) -> void:	
 	
 	var distance : float = cam.global_position.distance_to(target.global_position)
+	
+	if freeze_zoom or $Dolly/HorizontalPivot/VerticalPivot/MainCamera.freeze_zoom :
+		return
 	
 	if Input.is_action_just_released("flc_zoom_in") and distance > min_zoom:
 		cam.translate_object_local(Vector3.FORWARD * zoom_speed * delta)
