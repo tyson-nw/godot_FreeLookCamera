@@ -1,7 +1,6 @@
-[gd_scene load_steps=13 format=3 uid="uid://2ikr418gwwws"]
+[gd_scene load_steps=9 format=3 uid="uid://2ikr418gwwws"]
 
-[ext_resource type="Script" path="res://Scripts/FreeLookCamera.gd" id="1_eyj6w"]
-[ext_resource type="Script" path="res://Scripts/MainCamera.gd" id="2_dhet1"]
+[ext_resource type="PackedScene" uid="uid://dnfkuofhxxpe3" path="res://Scenes/free_look_camera.tscn" id="1_6ojob"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_aea5m"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -26,14 +25,6 @@ height = 2.0
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pr1q4"]
 albedo_color = Color(0.0880475, 0.641009, 0.554031, 1)
 
-[sub_resource type="SphereMesh" id="SphereMesh_3h0l4"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r83ux"]
-albedo_color = Color(1, 0.11, 0.11, 1)
-
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_3ly7e"]
-height = 1.03975
-
 [node name="World" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -53,27 +44,4 @@ visible = false
 mesh = SubResource("SphereMesh_ehd5x")
 surface_material_override/0 = SubResource("StandardMaterial3D_pr1q4")
 
-[node name="FreeLookCamera" type="Node3D" parent="."]
-script = ExtResource("1_eyj6w")
-show_target = true
-
-[node name="Dolly" type="Node3D" parent="FreeLookCamera"]
-
-[node name="HorizontalPivot" type="Node3D" parent="FreeLookCamera/Dolly"]
-
-[node name="VerticalPivot" type="Node3D" parent="FreeLookCamera/Dolly/HorizontalPivot"]
-transform = Transform3D(1, 0, 0, 0, 0.919135, 0.393942, 0, -0.393942, 0.919135, 0, 0, 0)
-
-[node name="MainCamera" type="Camera3D" parent="FreeLookCamera/Dolly/HorizontalPivot/VerticalPivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
-script = ExtResource("2_dhet1")
-
-[node name="target" type="MeshInstance3D" parent="FreeLookCamera/Dolly"]
-mesh = SubResource("SphereMesh_3h0l4")
-skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("StandardMaterial3D_r83ux")
-
-[node name="Area3D" type="Area3D" parent="FreeLookCamera/Dolly/target"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="FreeLookCamera/Dolly/target/Area3D"]
-shape = SubResource("CylinderShape3D_3ly7e")
+[node name="FreeLookCamera" parent="." instance=ExtResource("1_6ojob")]

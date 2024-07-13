@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://dnfkuofhxxpe3"]
+[gd_scene load_steps=5 format=3 uid="uid://dnfkuofhxxpe3"]
 
 [ext_resource type="Script" path="res://Scripts/FreeLookCamera.gd" id="1_3y43t"]
+[ext_resource type="Script" path="res://Scripts/MainCamera.gd" id="2_15og0"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_3h0l4"]
 
@@ -17,8 +18,10 @@ script = ExtResource("1_3y43t")
 [node name="VerticalPivot" type="Node3D" parent="Dolly/HorizontalPivot"]
 transform = Transform3D(1, 0, 0, 0, 0.919135, 0.393942, 0, -0.393942, 0.919135, 0, 0, 0)
 
-[node name="Camera3D" type="Camera3D" parent="Dolly/HorizontalPivot/VerticalPivot"]
+[node name="MainCamera" type="Camera3D" parent="Dolly/HorizontalPivot/VerticalPivot"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+script = ExtResource("2_15og0")
+freeze_zoom = true
 
 [node name="target" type="MeshInstance3D" parent="Dolly"]
 visible = false
