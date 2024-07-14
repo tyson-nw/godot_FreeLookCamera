@@ -40,8 +40,8 @@ mesh = SubResource("BoxMesh_l8l3w")
 surface_material_override/0 = SubResource("StandardMaterial3D_0xnmf")
 
 [node name="Center" type="MeshInstance3D" parent="."]
-visible = false
 mesh = SubResource("SphereMesh_ehd5x")
 surface_material_override/0 = SubResource("StandardMaterial3D_pr1q4")
 
 [node name="FreeLookCamera" parent="." instance=ExtResource("1_6ojob")]
+show_target = true

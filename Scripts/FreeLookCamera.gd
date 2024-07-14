@@ -19,7 +19,7 @@ extends Node3D
 @onready var dolly : Node3D = $Dolly
 @onready var horizontal_pivot = $Dolly/HorizontalPivot
 @onready var vertical_pivot = $Dolly/HorizontalPivot/VerticalPivot
-@onready var cam = $Dolly/HorizontalPivot/VerticalPivot/MainCamera
+@onready var camera = $Dolly/HorizontalPivot/VerticalPivot/MainCamera
 @onready var target = $Dolly/target
 
 var freemove : bool = false
@@ -47,7 +47,7 @@ func _ready() -> void :
 	else:
 		dolly.rotation.y = deg_to_rad(starting_rotation)
 		
-	cam.translate_object_local(Vector3.BACK * start_zoom)
+	camera.translate_object_local(Vector3.BACK * start_zoom)
 	mapinputs()
 	
 	
@@ -121,15 +121,15 @@ func verticalswing(delta)-> void:
 
 func zoom(delta) -> void:	
 	
-	var distance : float = cam.global_position.distance_to(target.global_position)
+	var distance : float = camera.global_position.distance_to(target.global_position)
 	
 	if freeze_zoom or $Dolly/HorizontalPivot/VerticalPivot/MainCamera.freeze_zoom :
 		return
 	
 	if Input.is_action_just_released("flc_zoom_in") and distance > min_zoom:
-		cam.translate_object_local(Vector3.FORWARD * zoom_speed * delta)
+		camera.translate_object_local(Vector3.FORWARD * zoom_speed * delta)
 	
 	if Input.is_action_just_released("flc_zoom_out") and distance < max_zoom:
-		cam.translate_object_local(Vector3.BACK * zoom_speed * delta)
+		camera.translate_object_local(Vector3.BACK * zoom_speed * delta)
 
 
