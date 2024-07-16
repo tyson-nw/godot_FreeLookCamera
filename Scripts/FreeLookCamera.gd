@@ -3,6 +3,7 @@ extends Node3D
 @export_range(0,5,.1) var dolly_speed : float = 4.0
 @export_range(0,0.1,.01) var rotation_speed : float = .02
 @export_range(-180,180,5) var starting_rotation : int = 15
+@export var limit_rotation : bool = true
 @export_range(-180,180,5) var min_rotation : int = -180
 @export_range(-180,180,5) var max_rotation : int = 180
 @export_range(0,90,1) var min_elevation : int = 10
@@ -107,12 +108,17 @@ func horizontalmove(delta) -> void :
 func horizontalswing(delta) -> void:
 	var pivotby : float = Input.get_last_mouse_velocity().x * delta * rotation_speed
 	if lock_dolly :
-		if horizontal_pivot.rotation.y + pivotby > deg_to_rad(min_rotation) and horizontal_pivot.rotation.y + pivotby < deg_to_rad(max_rotation) :
+		if limit_rotation:
+			if horizontal_pivot.rotation.y + pivotby > deg_to_rad(min_rotation) and horizontal_pivot.rotation.y + pivotby < deg_to_rad(max_rotation) :
+				horizontal_pivot.rotation.y = horizontal_pivot.rotation.y + pivotby
+		else:
 			horizontal_pivot.rotation.y = horizontal_pivot.rotation.y + pivotby
 	else:
-		if dolly.rotation.y + pivotby > deg_to_rad(min_rotation) and dolly.rotation.y + pivotby < deg_to_rad(max_rotation) :
+		if limit_rotation :
+			if dolly.rotation.y + pivotby > deg_to_rad(min_rotation) and dolly.rotation.y + pivotby < deg_to_rad(max_rotation) :
+				dolly.rotation.y = dolly.rotation.y + pivotby
+		else:
 			dolly.rotation.y = dolly.rotation.y + pivotby
-
 	
 func verticalswing(delta)-> void:
 	var pivotby : float = Input.get_last_mouse_velocity().y * delta * rotation_speed
