@@ -21,6 +21,9 @@ This is a simple freelook camera that pivots around a central point. That point 
 |dolly_speed | float | Multipler that adjusts the target's motion horizontally. |
 |rotation_speed| float | Multiplyer that amplifies the imput to control pivoiding horizontally around the point. |
 |starting_rotation | int in degrees | Starting camera offest from the baseline in degrees. |
+| limit_rotation | bool | Whether to limit or allow full rotation of the camera
+|min_rotation | int in degrees | How far left the camera can rotate around the target point.|
+|max_rotation | int in degrees | How far right the camera can rotate aroung the target point |
 |min_elevation| int in degrees | How low the camera can get in degrees. | 
 |min_elevation| int in degrees | How high the camera can get in degrees. | 
 |start_elevation| int in degrees | Starting camera angle in degrees. |
