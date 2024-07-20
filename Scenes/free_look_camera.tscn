@@ -19,14 +19,14 @@ max_zoom = 20
 
 [node name="HorizontalPivot" type="Node3D" parent="Dolly"]
 
-[node name="VerticalPivot" type="Node3D" parent="Dolly/HorizontalPivot"]
-transform = Transform3D(1, 0, 0, 0, 0.919135, 0.393942, 0, -0.393942, 0.919135, 0, 0, 0)
-
-[node name="MainCamera" type="Camera3D" parent="Dolly/HorizontalPivot/VerticalPivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
-script = ExtResource("2_15og0")
-
 [node name="target" type="MeshInstance3D" parent="Dolly"]
 mesh = SubResource("SphereMesh_3h0l4")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_r83ux")
+
+[node name="VerticalPivot" type="Node3D" parent="Dolly"]
+transform = Transform3D(1, 0, 0, 0, 0.919135, 0.393942, 0, -0.393942, 0.919135, 0, 0, 0)
+
+[node name="MainCamera" type="Camera3D" parent="Dolly/VerticalPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+script = ExtResource("2_15og0")

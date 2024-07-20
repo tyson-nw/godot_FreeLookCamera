@@ -4,7 +4,7 @@ extends Node3D
 @export var start_position : Vector3 = Vector3(0,0,0)
 @export_range(0,5,.1) var dolly_speed : float = 4.0
 
-@export_group("Rotation")
+@export_group("Mouse Rotation")
 @export_range(-180,180,5) var starting_rotation : int = 0
 @export_range(0,0.1,.01) var rotation_speed : float = .02
 
@@ -13,9 +13,13 @@ extends Node3D
 @export_range(-180,180,5) var min_rotation : int = -180
 @export_range(-180,180,5) var max_rotation : int = 180
 
-@export_subgroup("Rotation Keys")
+@export_group("Keyboard Rotation")
 @export var rotatate_on_keypress_hold : bool = true
-@export_range(0,360,1) var rotate_on_keypress : float = 5
+
+@export_subgroup("Rotate on hold")
+@export_range(0,360,1) var rotate_on_keypress_speed : float = 5
+@export_subgroup("Rotate on tap")
+@export_range(0,360,1) var rotate_on_keypress : int = 5
 @export_range(0,5,0.01) var rotate_on_keypress_time : float = 1.0
 
 @export_group("Elevation")
@@ -48,9 +52,9 @@ extends Node3D
 
 
 @onready var dolly : Node3D = $Dolly
-@onready var horizontal_pivot = $Dolly/HorizontalPivot
-@onready var vertical_pivot = $Dolly/HorizontalPivot/VerticalPivot
-@onready var camera = $Dolly/HorizontalPivot/VerticalPivot/MainCamera
+#@onready var horizontal_pivot = $Dolly/HorizontalPivot
+@onready var vertical_pivot = $Dolly/VerticalPivot
+@onready var camera = $Dolly/VerticalPivot/MainCamera
 @onready var target = $Dolly/target
 
 var last_camera_location : Vector3
@@ -131,10 +135,10 @@ func keypress_swing(delta : float) -> void :
 	if rotatate_on_keypress_hold :
 		#Rotate when holdign down the key
 		if Input.is_action_pressed("flc_camera_swing_left"):
-			horizontalswing(-1 * rotate_on_keypress * delta)
+			horizontalswing(-1 * rotate_on_keypress_speed * delta)
 			pass
 		if Input.is_action_pressed("flc_camera_swing_right") :
-			horizontalswing(rotate_on_keypress * delta)
+			horizontalswing(rotate_on_keypress_speed * delta)
 	else :
 		#Rotate on press, lock acceptance, kick of swing
 		if _swinging == "" :
@@ -187,7 +191,7 @@ func zoom(delta) -> void:
 	
 	var distance : float = camera.global_position.distance_to(target.global_position)
 	
-	if freeze_zoom or $Dolly/HorizontalPivot/VerticalPivot/MainCamera.freeze_zoom :
+	if freeze_zoom or camera.freeze_zoom :
 		return
 	
 	if Input.is_action_just_pressed("flc_zoom_in") and distance > min_zoom:
