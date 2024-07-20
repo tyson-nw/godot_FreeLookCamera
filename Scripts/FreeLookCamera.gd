@@ -50,9 +50,8 @@ extends CharacterBody3D
 }
 
 @onready var dolly : Node3D = $Dolly
-@onready var vertical_pivot = $Dolly/VerticalPivot
-@onready var camera = $Dolly/VerticalPivot/MainCamera
-@onready var target = $Dolly
+@onready var vertical_pivot : SpringArm3D = $Dolly/VerticalPivot
+@onready var camera : Camera3D = $Dolly/VerticalPivot/MainCamera
 
 var last_camera_location : Vector3
 
@@ -65,7 +64,7 @@ var _swing_step : float = 0
 var _swung : float = 0
 
 func _ready() -> void :
-	target.visible = show_target
+	dolly.visible = show_target
 
 	vertical_pivot.rotation.x = deg_to_rad(-start_elevation)
 	vertical_pivot.spring_length = start_zoom
@@ -76,6 +75,8 @@ func _ready() -> void :
 	mapinputs()
 	
 	last_camera_location = camera.position
+	
+	print ($".".collision_mask)
 	
 func mapinputs() -> void :
 	var ev

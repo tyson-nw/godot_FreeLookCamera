@@ -56,14 +56,17 @@ mesh = SubResource("SphereMesh_ehd5x")
 surface_material_override/0 = SubResource("StandardMaterial3D_pr1q4")
 
 [node name="FreeLookCamera" parent="." instance=ExtResource("1_6ojob")]
+collision_layer = 9
+collision_mask = 9
 show_target = true
 dolly_speed = 8.0
-rotatate_on_keypress_hold = false
 rotate_on_keypress = 90
 rotate_on_keypress_time = 0.5
 
 [node name="Area3D" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+collision_layer = 8
+collision_mask = 8
 
 [node name="Wall" type="MeshInstance3D" parent="Area3D"]
 mesh = SubResource("BoxMesh_uooyb")
@@ -74,6 +77,8 @@ shape = SubResource("BoxShape3D_qk5hv")
 
 [node name="Area3D2" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
+collision_layer = 8
+collision_mask = 8
 
 [node name="Wall2" type="MeshInstance3D" parent="Area3D2"]
 mesh = SubResource("BoxMesh_uooyb")
@@ -84,6 +89,8 @@ shape = SubResource("BoxShape3D_qk5hv")
 
 [node name="Area3D3" type="StaticBody3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 10, 0, 0)
+collision_layer = 8
+collision_mask = 8
 
 [node name="Wall3" type="MeshInstance3D" parent="Area3D3"]
 mesh = SubResource("BoxMesh_uooyb")
@@ -94,6 +101,8 @@ shape = SubResource("BoxShape3D_qk5hv")
 
 [node name="Area3D4" type="StaticBody3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -10, 0, 0)
+collision_layer = 8
+collision_mask = 8
 
 [node name="Wall4" type="MeshInstance3D" parent="Area3D4"]
 mesh = SubResource("BoxMesh_uooyb")
