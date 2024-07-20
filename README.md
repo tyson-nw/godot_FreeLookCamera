@@ -16,36 +16,81 @@ This is a simple freelook camera that pivots around a central point. That point 
 
 ## Config
 
+### Dolly Position
 | key | type | description |
 |:--: |:--:|:--|
+|start_position | Vector3 | The position of the target point |
 |dolly_speed | float | Multipler that adjusts the target's motion horizontally. |
-|rotation_speed| float | Multiplyer that amplifies the imput to control pivoiding horizontally around the point. |
+
+### Rotation
+| key | type | description |
+|:--: |:--:|:--|
 |starting_rotation | int in degrees | Starting camera offest from the baseline in degrees. |
+|rotation_speed| float | Multiplyer that amplifies the imput to control pivoiding horizontally around the point. |
+
+#### Rotation Limits
+| key | type | description |
+|:--: |:--:|:--|
 | limit_rotation | bool | Whether to limit or allow full rotation of the camera
 |min_rotation | int in degrees | How far left the camera can rotate around the target point.|
 |max_rotation | int in degrees | How far right the camera can rotate aroung the target point |
-|min_elevation| int in degrees | How low the camera can get in degrees. | 
-|min_elevation| int in degrees | How high the camera can get in degrees. | 
+
+### Keyboard Rotation
+| key | type | description |
+|:--: |:--:|:--|
+| rotate_on_keypress_hold | bool | Does holding a keypress rotate until you let go, or does pressing a key jump a specific rotation |
+
+#### Rotate on hold
+| key | type | description |
+|:--: |:--:|:--|
+| rotate_on_keypress_speed | float | How fast does the camera rotate when holding|
+
+#### Rotate on tap
+| key | type | description |
+|:--: |:--:|:--|
+| rotate_on_keypress | int | Degrees which the camera should move on keypress |
+| rotate_on_keypress_time | float | how many seconds should the camera take to reach the `rotate_on_keypress` angle |
+
+### Elevation
+| key | type | description |
+|:--: |:--:|:--|
 |start_elevation| int in degrees | Starting camera angle in degrees. |
+|min_elevation| int in degrees | How low the camera can get in degrees. | 
+|min_elevation| int in degrees | How high the camera can get in degrees. |
+
+### Zoom
+
+| key | type | description |
+|:--: |:--:|:--|
 |zoom_speed| int | Multiplier that adjusts how fast a camera zooms in and out. |
 |min_zoom| int | How close the camera can get to the target point. |
 |max_zoom | int | How far the camera can get away from the target point. |
 |start_zoom | int | Starting distance from the target point .|
 |freeze_zoom | bool | disable zoom if you are using the mousewheel elsewhere. IF you can't reference the FreeLookCamera node, you can set get_viewport().get_camera_3d().freeze_zoom to true and it will also lock the zoom. |
 |show_target | bool | Shows the target indicator sphere. |
-|lock_dolly | bool | Locks the dolly so the wasd movement is independant of where the camera is looking. |
+
+### Controls
+Unset any of these to disable the control.
+| key | type | description |
+|:--: |:--:|:--|
 |key_controls| Dictionary | the keys that trigger target point movement. Keys must be in an array associated with each key. |
 |mouse_controls| Dictionary | the mouse actions that trigger camera movement. Keys must be in an array associated with each key. |
 
-## Controls
+#### Key Controls
 
 | input | input key | description |
 |:--:|:--:|:--|
-|flc_camera_foreward| KEY_W |
+|flc_camera_foreward| KEY_W | 
 |flc_camera_back | KEY_S|
 |flc_camera_left | KEY_A|
 |flc_camera_right | KEY_D|
-|flc_activate_zoom| MOUSE_BUTTON_MIDDLE |
+|flc_camera_swing_left| KEY_Q |
+|flc_camera_swing_right | KEY_E |
+
+#### Mouse Controls
+| input | input key | description |
+|:--:|:--:|:--|
+|flc_activate_swing| MOUSE_BUTTON_MIDDLE |
 |flc_zoom_in|MOUSE_BUTTON_WHEEL_UP|
 |flc_zoom_out|MOUSE_BUTTON_WHEEL_DOWN|
 
@@ -53,4 +98,4 @@ This is a simple freelook camera that pivots around a central point. That point 
 - Add joystic support
 - add camera collision to dynamically adjust zoom
 - add keyboard zoom
-- add keyboard pan amd pitch
+- add swip controls

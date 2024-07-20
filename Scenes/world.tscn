@@ -1,6 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://2ikr418gwwws"]
+[gd_scene load_steps=11 format=3 uid="uid://2ikr418gwwws"]
 
 [ext_resource type="PackedScene" uid="uid://dnfkuofhxxpe3" path="res://Scenes/free_look_camera.tscn" id="1_6ojob"]
+[ext_resource type="Texture2D" uid="uid://csogpnv23plvt" path="res://Assets/texture_grey_04.png" id="1_xxjbu"]
+[ext_resource type="Texture2D" uid="uid://sa3pkni7618h" path="res://Assets/texture_orange_05.png" id="2_xt781"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_aea5m"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -17,13 +19,16 @@ tonemap_mode = 2
 [sub_resource type="BoxMesh" id="BoxMesh_l8l3w"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0xnmf"]
+albedo_texture = ExtResource("1_xxjbu")
+uv1_scale = Vector3(10, 10, 10)
 
 [sub_resource type="SphereMesh" id="SphereMesh_ehd5x"]
 radius = 1.0
 height = 2.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pr1q4"]
-albedo_color = Color(0.0880475, 0.641009, 0.554031, 1)
+albedo_texture = ExtResource("2_xt781")
+uv1_scale = Vector3(10, 10, 10)
 
 [node name="World" type="Node3D"]
 
