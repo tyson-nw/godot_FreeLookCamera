@@ -1,4 +1,4 @@
-extends Node3D
+extends CharacterBody3D
 @export var show_target : bool = false
 @export_group("Dolly Position")
 @export var start_position : Vector3 = Vector3(0,0,0)
@@ -30,7 +30,7 @@ extends Node3D
 @export_group("Zoom")
 @export var freeze_zoom : bool = false
 @export_range(0,20,1) var start_zoom : int = 4
-@export_range(0,50,1) var zoom_speed : int = 20
+@export_range(0,1,.5) var zoom_speed : float = 1
 @export_range(0,100,1) var min_zoom : int = 2
 @export_range(0,100,1) var max_zoom : int = 10
 
@@ -49,13 +49,10 @@ extends Node3D
 	"flc_zoom_out" : [MOUSE_BUTTON_WHEEL_DOWN]
 }
 
-
-
 @onready var dolly : Node3D = $Dolly
-#@onready var horizontal_pivot = $Dolly/HorizontalPivot
 @onready var vertical_pivot = $Dolly/VerticalPivot
 @onready var camera = $Dolly/VerticalPivot/MainCamera
-@onready var target = $Dolly/target
+@onready var target = $Dolly
 
 var last_camera_location : Vector3
 
@@ -66,12 +63,12 @@ var _swing_from : float = 0
 var _swing_to : float = 0
 var _swing_step : float = 0
 var _swung : float = 0
-#var _curr_swing : float = 0
-
 
 func _ready() -> void :
 	target.visible = show_target
+
 	vertical_pivot.rotation.x = deg_to_rad(-start_elevation)
+	vertical_pivot.spring_length = start_zoom
 	$".".position = start_position
 	dolly.rotation.y = deg_to_rad(starting_rotation)
 		
@@ -103,21 +100,29 @@ func mapinputs() -> void :
 			InputMap.action_add_event(action, ev)
 
 func _process(delta) -> void :
-	horizontalmove(delta)
+	
 	zoom(delta)
 	mouse_swing(delta)
 	keypress_swing(delta)
-	
-	
-	last_camera_location = camera.position
+
+func _physics_process(delta):
+	horizontal_move(delta)
 
 # controls the movement of the dolly
-func horizontalmove(delta : float) -> void :
+func horizontal_move(delta : float) -> void :
 	var direction := Input.get_vector("flc_camera_left","flc_camera_right","flc_camera_foreward","flc_camera_back")
 	var direction3d := Vector3(direction.x, 0, direction.y)
-		
-
-	dolly.translate_object_local(direction3d * zoom_speed * delta)
+	direction3d = direction3d.rotated(Vector3.UP, dolly.rotation.y)
+	if direction:
+		velocity.x = direction3d.x * dolly_speed
+		velocity.z = direction3d.z * dolly_speed
+	else:
+		velocity.x = move_toward(velocity.x, 0, dolly_speed)
+		velocity.z = move_toward(velocity.z, 0, dolly_speed)
+	
+	move_and_slide()
+	
+	last_camera_location = camera.position
 
 func mouse_swing(delta : float) -> void :
 	if Input.is_action_just_pressed("flc_activate_swing"):
@@ -129,7 +134,7 @@ func mouse_swing(delta : float) -> void :
 	if _unlock_swing :
 		horizontalswing(Input.get_last_mouse_velocity().x * delta * rotation_speed)
 		verticalswing(delta)
-	
+	last_camera_location = camera.position
 
 func keypress_swing(delta : float) -> void :
 	if rotatate_on_keypress_hold :
@@ -172,7 +177,7 @@ func keypress_swing(delta : float) -> void :
 			else:
 				dolly.rotation.y = deg_to_rad(round(rad_to_deg(_swing_from+_swing_to)))
 				_swinging = ""
-
+	last_camera_location = camera.position
 
 # controls horizontal swing
 func horizontalswing(pivotby : float) -> void:
@@ -181,23 +186,29 @@ func horizontalswing(pivotby : float) -> void:
 			dolly.rotation.y = dolly.rotation.y + pivotby
 	else:
 		dolly.rotation.y = dolly.rotation.y + pivotby
-	
+	last_camera_location = camera.position
+
 func verticalswing(delta)-> void:
 	var pivotby : float = Input.get_last_mouse_velocity().y * delta * rotation_speed
 	_curr_pivot -= pivotby
 	vertical_pivot.rotation.x = clamp(vertical_pivot.rotation.x-pivotby, deg_to_rad(-max_elevation), deg_to_rad(-min_elevation))
-
+	last_camera_location = camera.position
+	
 func zoom(delta) -> void:	
 	
-	var distance : float = camera.global_position.distance_to(target.global_position)
+	#var distance : float = camera.global_position.distance_to(target.global_position)
+	var distance : float = vertical_pivot.spring_length
 	
 	if freeze_zoom or camera.freeze_zoom :
 		return
 	
 	if Input.is_action_just_pressed("flc_zoom_in") and distance > min_zoom:
-		camera.translate_object_local(Vector3.FORWARD * zoom_speed * delta)
-	
-	if Input.is_action_just_pressed("flc_zoom_out") and distance < max_zoom:
-		camera.translate_object_local(Vector3.BACK * zoom_speed * delta)
+		vertical_pivot.spring_length -= zoom_speed
+		
 
+	if Input.is_action_just_pressed("flc_zoom_out") and distance < max_zoom:
+		vertical_pivot.spring_length += zoom_speed
+		
+
+	last_camera_location = camera.position
 

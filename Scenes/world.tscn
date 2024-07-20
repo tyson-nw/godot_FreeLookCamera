@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://2ikr418gwwws"]
+[gd_scene load_steps=13 format=3 uid="uid://2ikr418gwwws"]
 
 [ext_resource type="PackedScene" uid="uid://dnfkuofhxxpe3" path="res://Scenes/free_look_camera.tscn" id="1_6ojob"]
 [ext_resource type="Texture2D" uid="uid://csogpnv23plvt" path="res://Assets/texture_grey_04.png" id="1_xxjbu"]
@@ -20,7 +20,8 @@ tonemap_mode = 2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0xnmf"]
 albedo_texture = ExtResource("1_xxjbu")
-uv1_scale = Vector3(10, 10, 10)
+uv1_scale = Vector3(5, 5, 5)
+uv1_triplanar = true
 
 [sub_resource type="SphereMesh" id="SphereMesh_ehd5x"]
 radius = 1.0
@@ -29,6 +30,12 @@ height = 2.0
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pr1q4"]
 albedo_texture = ExtResource("2_xt781")
 uv1_scale = Vector3(10, 10, 10)
+
+[sub_resource type="BoxMesh" id="BoxMesh_uooyb"]
+size = Vector3(20, 1, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qk5hv"]
+size = Vector3(20, 1, 1)
 
 [node name="World" type="Node3D"]
 
@@ -50,3 +57,47 @@ surface_material_override/0 = SubResource("StandardMaterial3D_pr1q4")
 
 [node name="FreeLookCamera" parent="." instance=ExtResource("1_6ojob")]
 show_target = true
+dolly_speed = 8.0
+rotatate_on_keypress_hold = false
+rotate_on_keypress = 90
+rotate_on_keypress_time = 0.5
+
+[node name="Area3D" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="Wall" type="MeshInstance3D" parent="Area3D"]
+mesh = SubResource("BoxMesh_uooyb")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("BoxShape3D_qk5hv")
+
+[node name="Area3D2" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
+
+[node name="Wall2" type="MeshInstance3D" parent="Area3D2"]
+mesh = SubResource("BoxMesh_uooyb")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D2"]
+shape = SubResource("BoxShape3D_qk5hv")
+
+[node name="Area3D3" type="Area3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 10, 0, 0)
+
+[node name="Wall3" type="MeshInstance3D" parent="Area3D3"]
+mesh = SubResource("BoxMesh_uooyb")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D3"]
+shape = SubResource("BoxShape3D_qk5hv")
+
+[node name="Area3D4" type="Area3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -10, 0, 0)
+
+[node name="Wall4" type="MeshInstance3D" parent="Area3D4"]
+mesh = SubResource("BoxMesh_uooyb")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D4"]
+shape = SubResource("BoxShape3D_qk5hv")

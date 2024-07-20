@@ -1,8 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://dnfkuofhxxpe3"]
+[gd_scene load_steps=8 format=3 uid="uid://dnfkuofhxxpe3"]
 
 [ext_resource type="Script" path="res://Scripts/FreeLookCamera.gd" id="1_3y43t"]
 [ext_resource type="Script" path="res://Scripts/MainCamera.gd" id="2_15og0"]
 [ext_resource type="Texture2D" uid="uid://clyg2qry6k4h8" path="res://Assets/texture_red_05.png" id="3_hgsnn"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_23vty"]
+height = 0.5
 
 [sub_resource type="SphereMesh" id="SphereMesh_3h0l4"]
 
@@ -10,23 +13,63 @@
 albedo_texture = ExtResource("3_hgsnn")
 uv1_scale = Vector3(10, 10, 10)
 
-[node name="FreeLookCamera" type="Node3D"]
+[sub_resource type="GDScript" id="GDScript_kjem5"]
+script/source = "extends CharacterBody3D
+
+
+const SPEED = 5.0
+const JUMP_VELOCITY = 4.5
+
+# Get the gravity from the project settings to be synced with RigidBody nodes.
+var gravity = ProjectSettings.get_setting(\"physics/3d/default_gravity\")
+
+
+func _physics_process(delta):
+	# Add the gravity.
+	if not is_on_floor():
+		velocity.y -= gravity * delta
+
+	# Handle jump.
+	if Input.is_action_just_pressed(\"ui_accept\") and is_on_floor():
+		velocity.y = JUMP_VELOCITY
+
+	# Get the input direction and handle the movement/deceleration.
+	# As good practice, you should replace UI actions with custom gameplay actions.
+	var input_dir = Input.get_vector(\"ui_left\", \"ui_right\", \"ui_up\", \"ui_down\")
+	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	if direction:
+		velocity.x = direction.x * SPEED
+		velocity.z = direction.z * SPEED
+	else:
+		velocity.x = move_toward(velocity.x, 0, SPEED)
+		velocity.z = move_toward(velocity.z, 0, SPEED)
+
+	move_and_slide()
+"
+
+[node name="FreeLookCamera" type="CharacterBody3D"]
 script = ExtResource("1_3y43t")
 limit_rotation = false
 max_zoom = 20
 
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+shape = SubResource("CylinderShape3D_23vty")
+
 [node name="Dolly" type="Node3D" parent="."]
 
-[node name="HorizontalPivot" type="Node3D" parent="Dolly"]
+[node name="VerticalPivot" type="SpringArm3D" parent="Dolly"]
+transform = Transform3D(1, 0, 0, 0, 0.919135, 0.393942, 0, -0.393942, 0.919135, 0, 0, 0)
+spring_length = 10.0
+
+[node name="MainCamera" type="Camera3D" parent="Dolly/VerticalPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+script = ExtResource("2_15og0")
 
 [node name="target" type="MeshInstance3D" parent="Dolly"]
 mesh = SubResource("SphereMesh_3h0l4")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_r83ux")
 
-[node name="VerticalPivot" type="Node3D" parent="Dolly"]
-transform = Transform3D(1, 0, 0, 0, 0.919135, 0.393942, 0, -0.393942, 0.919135, 0, 0, 0)
-
-[node name="MainCamera" type="Camera3D" parent="Dolly/VerticalPivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
-script = ExtResource("2_15og0")
+[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+script = SubResource("GDScript_kjem5")
