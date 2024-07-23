@@ -10,9 +10,8 @@ This is a simple freelook camera that pivots around a central point. That point 
 
 ## Installation
 
-1. Copy the `free_look_camera.tscn` to your `res://Scenes` folder 
-2. `FreeLookCamera.gd` and `MainCamera.gd` to your `res://Scripts` folder.
-3. Drag the `free_look_camera.tscn` into your scene.
+1. Copy the `FreeLookCamera` folder to your project folder 
+2. Drag the `free_look_camera.tscn` into your scene.
 
 ## Config
 

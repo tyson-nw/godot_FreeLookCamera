@@ -60,7 +60,6 @@ var _curr_pivot : float = 0
 var _swinging : String = ""
 var _swing_from : float = 0
 var _swing_to : float = 0
-var _swing_step : float = 0
 var _swung : float = 0
 
 func _ready() -> void :
@@ -76,7 +75,7 @@ func _ready() -> void :
 	
 	last_camera_location = camera.position
 	
-	print ($".".collision_mask)
+	vertical_pivot.collision_mask = ($".".collision_mask)
 	
 func mapinputs() -> void :
 	var ev
@@ -102,15 +101,13 @@ func mapinputs() -> void :
 
 func _process(delta) -> void :
 	
-	zoom(delta)
+	zoom()
 	mouse_swing(delta)
 	keypress_swing(delta)
-
-func _physics_process(delta):
-	horizontal_move(delta)
+	horizontal_move()
 
 # controls the movement of the dolly
-func horizontal_move(delta : float) -> void :
+func horizontal_move() -> void :
 	var direction := Input.get_vector("flc_camera_left","flc_camera_right","flc_camera_foreward","flc_camera_back")
 	var direction3d := Vector3(direction.x, 0, direction.y)
 	direction3d = direction3d.rotated(Vector3.UP, dolly.rotation.y)
@@ -195,7 +192,7 @@ func verticalswing(delta)-> void:
 	vertical_pivot.rotation.x = clamp(vertical_pivot.rotation.x-pivotby, deg_to_rad(-max_elevation), deg_to_rad(-min_elevation))
 	last_camera_location = camera.position
 	
-func zoom(delta) -> void:	
+func zoom() -> void:	
 	
 	#var distance : float = camera.global_position.distance_to(target.global_position)
 	var distance : float = vertical_pivot.spring_length
