@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://dnfkuofhxxpe3"]
 
-[ext_resource type="Script" path="res://Component/FreeLookCamera/FreeLookCamera.gd" id="1_3y43t"]
-[ext_resource type="Script" path="res://Component/FreeLookCamera/MainCamera.gd" id="2_15og0"]
+[ext_resource type="Script" path="res://Components/FreeLookCamera/FreeLookCamera.gd" id="1_3y43t"]
+[ext_resource type="Script" path="res://Components/FreeLookCamera/MainCamera.gd" id="2_15og0"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_23vty"]
 height = 0.5
